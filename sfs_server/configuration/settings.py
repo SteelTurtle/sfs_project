@@ -90,5 +90,3 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/storage/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'storage')
-
-APPEND_SLASH = False
