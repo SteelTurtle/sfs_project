@@ -1,3 +1,4 @@
+import datetime
 import os
 from pathlib import Path
 
@@ -6,9 +7,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '-r()w#4hf$9emafhhh^my&y1%e6j+jsap&%kj9itude#+(&xvt'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(int(os.environ.get('DEBUG', 0)))
 
 ALLOWED_HOSTS = []
+ALLOWED_HOSTS.extend(
+    filter(
+        None,
+        os.environ.get('ALLOWED_HOSTS', '').split(',')
+    )
+)
 
 # Application definition
 
@@ -55,8 +62,11 @@ WSGI_APPLICATION = 'configuration.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'HOST': os.environ.get('DB_HOST'),
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASS'),
     }
 }
 
@@ -90,3 +100,9 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/storage/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'storage')
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+    )
+}
