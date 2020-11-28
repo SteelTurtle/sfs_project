@@ -7,20 +7,20 @@ import {
 } from '@angular/common/http';
 import {Observable, Subject} from 'rxjs';
 
-const url = 'http://localhost:8080/api/files';
+const serverUrl = 'http://localhost:8080/api/files';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class UploadService {
   constructor(private httpClient: HttpClient) {
   }
 
-  public upload(files: Set<File>): { [key: string]: { progress: Observable<number> } } {
+  public uploadFiles(files: Set<File>): { [key: string]: { progress: Observable<number> } } {
     const uploadStatus: { [key: string]: { progress: Observable<number> } } = {};
 
     files.forEach(file => {
       const formData: FormData = new FormData();
       formData.append('file', file);
-      const request = new HttpRequest('POST', url, formData, {reportProgress: true});
+      const request = new HttpRequest('POST', serverUrl, formData, {reportProgress: true});
       const progressStatus = new Subject<number>();
 
       this.httpClient.request(request).subscribe(event => {

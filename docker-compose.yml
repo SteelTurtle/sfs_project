@@ -43,11 +43,6 @@ services:
       - POSTGRES_PASSWORD=postgres
     volumes:
       - sfs-database:/var/lib/postgresql/data
-    healthcheck:
-      test: [ "CMD", "pg_isready", "-q", "-d", "${POSTGRES_DB}", "-U", "${POSTGRES_USER}" ]
-      timeout: 20s
-      interval: 5s
-      retries: 3
 
   nginx:
     build:
