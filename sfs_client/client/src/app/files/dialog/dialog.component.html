@@ -4,7 +4,7 @@
        (change)="onFilesAdded()"
        multiple/>
 <div class="container" fxLayout="column" fxLayoutAlign="space-evenly stretch">
-  <h1 mat-dialog-title>Upload Files</h1>
+  <h1 mat-dialog-title>Select one or more files to upload</h1>
   <div>
     <button
       [disabled]="uploadingStatus || uploadSuccessful"
@@ -12,7 +12,7 @@
       color="primary"
       class="add-files-btn"
       (click)="addFiles()">
-      Add Files
+      Upload
     </button>
   </div>
 

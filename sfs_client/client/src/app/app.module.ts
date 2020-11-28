@@ -2,8 +2,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 
 import {AppComponent} from './app.component';
-import {UploadModule} from './upload/upload.module';
-import {MaterialComponentsModule} from "./material.module";
+import {FilesModule} from './files/files.module';
 
 @NgModule({
   declarations: [
@@ -11,7 +10,7 @@ import {MaterialComponentsModule} from "./material.module";
   ],
   imports: [
     BrowserModule,
-    UploadModule
+    FilesModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,5 +1,5 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {UploadService} from '../upload.service';
+import {Component, ViewChild} from '@angular/core';
+import {FileStorageService} from '../services/file-storage.service';
 import {MatDialogRef} from '@angular/material/dialog';
 import {forkJoin, Observable} from 'rxjs';
 
@@ -10,12 +10,15 @@ import {forkJoin, Observable} from 'rxjs';
 })
 export class DialogComponent {
 
-  constructor(public dialogRef: MatDialogRef<DialogComponent>, public uploadService: UploadService) {
-  }
+  primaryButtonText = 'Upload';
 
   progressIndicator: { [x: string]: { progress: Observable<number>; } | { progress: any; }; };
   isCloseable = true;
-  primaryButtonText = 'Upload Files';
+
+  constructor(private dialogRef: MatDialogRef<DialogComponent>,
+              private fileStorageService: FileStorageService) {
+  }
+
   showCancelButton = true;
   uploadingStatus = false;
   uploadSuccessful = false;
@@ -36,9 +39,11 @@ export class DialogComponent {
   }
 
   closeDialog(): void {
-    if (this.uploadSuccessful) { return this.dialogRef.close(); }
+    if (this.uploadSuccessful) {
+      return this.dialogRef.close();
+    }
     this.uploadingStatus = true;
-    this.progressIndicator = this.uploadService.uploadFiles(this.files);
+    this.progressIndicator = this.fileStorageService.uploadFiles(this.files);
     const allProgressObservables = [];
     for (const key in this.progressIndicator) {
       allProgressObservables.push(this.progressIndicator[key].progress);
