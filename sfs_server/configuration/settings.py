@@ -9,7 +9,7 @@ SECRET_KEY = '-r()w#4hf$9emafhhh^my&y1%e6j+jsap&%kj9itude#+(&xvt'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(int(os.environ.get('DEBUG', 0)))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost']
 ALLOWED_HOSTS.extend(
     filter(
         None,
@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'channels',
     'files.apps.FilesConfig',
 ]
 
@@ -59,6 +60,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'configuration.wsgi.application'
+
+ASGI_APPLICATION = 'configuration.routing.application'
 
 DATABASES = {
     'default': {
@@ -97,12 +100,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-MEDIA_URL = '/storage/'
+STATIC_ROOT = os.path.join(BASE_DIR, '../static')
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'storage')
+MEDIA_URL = '/media/'
 
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.SessionAuthentication',
-    )
-}
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

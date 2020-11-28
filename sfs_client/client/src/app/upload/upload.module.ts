@@ -24,7 +24,7 @@ import {HttpClientModule} from '@angular/common/http';
   ],
   declarations: [UploadComponent, DialogComponent],
   exports: [UploadComponent],
-  entryComponents: [DialogComponent], // Add the DialogComponent as entry component
+  entryComponents: [DialogComponent],
   providers: [UploadService],
 })
 export class UploadModule {}

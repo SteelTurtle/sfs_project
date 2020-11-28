@@ -21,7 +21,7 @@ class FilesHttpTest(APITestCase):
 
     def test_can_list_files_on_server(self):
         picture_files = [_create_random_picture_file() for _ in range(0, 5)]
-        # given some random files saved in the storage
+        # given some random files saved in the media
         for picture in picture_files:
             response = self.client.post(reverse('files:files_list'), data={
                 'file': picture

@@ -138,4 +138,4 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
-/sfs_server/storage/
+/sfs_server/media/

@@ -9,4 +9,3 @@ urlpatterns = [
     path('files', FilesListView.as_view(), name='files_list'),
     path('files/<int:pk>', FileView.as_view(), name='file_detail'),
 ]
-urlpatterns = format_suffix_patterns(urlpatterns)

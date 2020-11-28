@@ -1,4 +1,4 @@
-FROM node:14.8.0-alpine
+FROM node:alpine
 
 RUN echo @edge http://nl.alpinelinux.org/alpine/latest-stable/community >> /etc/apk/repositories \
     && echo @edge http://nl.alpinelinux.org/alpine/latest-stable/main >> /etc/apk/repositories \

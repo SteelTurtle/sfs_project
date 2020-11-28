@@ -8,18 +8,17 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./sfs-server:/sfs-server
-    command: >
-      sh -c "python manage.py wait_for_online_db &&
-             python manage.py migrate &&
-             python manage.py runserver 0.0.0.0:8000"
+      - ./sfs_server:/sfs_server
+      - ./sfs_server/media:/usr/src/app/media
+      - ./sfs_server/static:/usr/src/app/static
+    command: daphne --bind 0.0.0.0 --port 8000 configuration.asgi:application
     environment:
       - DB_HOST=sfs-database
       - DB_NAME=sfs_api_db
       - DB_USER=postgres
       - DB_PASS=postgres
       - DEBUG=1
-      - ALLOWED_HOSTS=0.0.0.0
+      - ALLOWED_HOSTS=*
     depends_on:
       - sfs-database
 
@@ -35,8 +34,6 @@ services:
       - CHROME_BIN=chromium-browser
     ports:
       - 4200:4200
-    volumes:
-      - ./sfs-client/client:/usr/src/app
 
   sfs-database:
     image: postgres:12-alpine
@@ -44,8 +41,31 @@ services:
       - POSTGRES_DB=sfs_api_db
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    volumes:
+      - sfs-database:/var/lib/postgresql/data
     healthcheck:
       test: [ "CMD", "pg_isready", "-q", "-d", "${POSTGRES_DB}", "-U", "${POSTGRES_USER}" ]
       timeout: 20s
       interval: 5s
       retries: 3
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: sfs-nginx
+    depends_on:
+      - sfs-server
+      - sfs-client
+    ports:
+      - 8080:80
+    restart: always
+    volumes:
+      - media:/usr/src/app/media
+      - static:/usr/src/app/static
+
+
+volumes:
+  sfs-database:
+  media:
+  static:
