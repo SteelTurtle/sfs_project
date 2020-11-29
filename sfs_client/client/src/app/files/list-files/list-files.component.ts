@@ -14,6 +14,7 @@ import {MatSort} from '@angular/material/sort';
 })
 export class ListFilesComponent implements OnInit, AfterViewInit, OnDestroy {
 
+  // unused for this implementation. I did not have time to complete it.
   filesListSubscription: Subscription;
   dataSource = new MatTableDataSource<StoredFile>();
   @ViewChild(MatSort, {static: false}) sort: MatSort;
@@ -30,6 +31,13 @@ export class ListFilesComponent implements OnInit, AfterViewInit, OnDestroy {
         this.dataSource.data = files;
       }
     );
+    this.filesListSubscription = this.listFilesService.changedFilesListSubject.subscribe(() => {
+      this.fileStorageService.fetchFilesFromServer().subscribe(
+        (files: StoredFile[]) => {
+          this.dataSource.data = files;
+        }
+      );
+    });
   }
 
   ngAfterViewInit(): void {

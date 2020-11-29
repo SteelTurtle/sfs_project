@@ -1,12 +1,12 @@
 from io import BytesIO
 
-from django.core.files.uploadedfile import SimpleUploadedFile
 from PIL import Image
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from files.models import File
+from sfs_server.files.models import File
 
 
 class FilesHttpTest(APITestCase):

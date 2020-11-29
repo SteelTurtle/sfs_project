@@ -9,9 +9,12 @@ services:
       - "8000:8000"
     volumes:
       - ./sfs_server:/sfs_server
-      - ./sfs_server/media:/usr/src/app/media
-      - ./sfs_server/static:/usr/src/app/static
-    command: daphne --bind 0.0.0.0 --port 8000 configuration.asgi:application
+      - media:/usr/src/app/media
+      - static:/usr/src/app/static
+    command: >
+      sh -c "python manage.py wait_for_online_db &&
+             python manage.py migrate &&
+             daphne --bind 0.0.0.0 --port 8000 configuration.asgi:application"
     environment:
       - DB_HOST=sfs-database
       - DB_NAME=sfs_api_db
@@ -34,6 +37,8 @@ services:
       - CHROME_BIN=chromium-browser
     ports:
       - 4200:4200
+    volumes:
+      - ./sfs_client/client:/usr/src/app
 
   sfs-database:
     image: postgres:12-alpine
