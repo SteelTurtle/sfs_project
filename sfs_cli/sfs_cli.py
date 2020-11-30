@@ -6,7 +6,7 @@ import urllib.parse
 
 import requests
 
-logger = logging.getLogger("SFS_CLI says>>>")
+logger = logging.getLogger('SFS_CLI_LOGGER:   ')
 logger.setLevel(logging.DEBUG)
 console_handler = logging.StreamHandler(sys.stdout)
 console_handler.setLevel(logging.ERROR)
@@ -37,6 +37,11 @@ if file_id is not None and http_verb == 'GET':
         logger.error('The "file_id" field must be a int!')
         exit(1)
     api_response = requests.get(api_url + '/' + file_id)
+    status_code = api_response.status_code
+    if status_code != 200:
+        logger.error('File with id ' + file_id + " doesn't seem to exist. Please verify that the "
+                                                 "file with the selected id is on the server.")
+        exit(1)
     file_path = api_response.json()['file']
     file_name = file_path.split('/')[-1]
     print('Downloading file ' + file_name + '...')
@@ -49,4 +54,9 @@ elif http_verb == 'GET':
     api_response = requests.get(api_url)
     print('Retrieving files stored on server at ' + url_base + '...')
     files = api_response.json()
-    [print(i, file['file'].split('/')[-1]) for i, file in enumerate(files, start=1)]
+    print('| ID |         FILE          |')
+    print('_____________________________')
+    [
+        print('{:<6}{}'.format(i, file['file'].split('/')[-1]))
+        for i, file in enumerate(files, start=1)
+    ]
