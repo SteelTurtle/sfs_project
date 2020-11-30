@@ -14,12 +14,11 @@ import {MatSort} from '@angular/material/sort';
 })
 export class ListFilesComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  // unused for this implementation. I did not have time to complete it.
   filesListSubscription: Subscription;
   dataSource = new MatTableDataSource<StoredFile>();
   @ViewChild(MatSort, {static: false}) sort: MatSort;
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
-  displayedColumns: string[] = ['id', 'file', 'created_at'];
+  displayedColumns: string[] = ['id', 'file', 'created_at', 'actions'];
 
   constructor(private listFilesService: ListFilesService,
               private fileStorageService: FileStorageService) {
@@ -48,6 +47,11 @@ export class ListFilesComponent implements OnInit, AfterViewInit, OnDestroy {
   doFilter(filterValue: string): void {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
+
+  getRecord(name) {
+    alert(name);
+  }
+
 
   ngOnDestroy(): void {
     this.filesListSubscription.unsubscribe();

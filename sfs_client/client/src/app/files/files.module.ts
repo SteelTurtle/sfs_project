@@ -18,6 +18,7 @@ import {MatInputModule} from '@angular/material/input';
 
 @NgModule({
   imports: [
+    BrowserAnimationsModule,
     CommonModule,
     MatButtonModule,
     MatDialogModule,
