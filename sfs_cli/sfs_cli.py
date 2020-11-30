@@ -1,7 +1,18 @@
+#!/usr/bin/env python3
 import argparse
-import re
+import logging
+import sys
+import urllib.parse
 
 import requests
+
+logger = logging.getLogger("SFS_CLI says>>>")
+logger.setLevel(logging.DEBUG)
+console_handler = logging.StreamHandler(sys.stdout)
+console_handler.setLevel(logging.ERROR)
+log_format = logging.Formatter('[%(asctime)s] %(levelname)-8s %(name)-12s %(message)s')
+console_handler.setFormatter(log_format)
+logger.addHandler(console_handler)
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-c', '--command',
@@ -16,22 +27,26 @@ args = vars(parser.parse_args())
 http_verb = args['command']
 api_url = args['url']
 file_id = args['file']
-
-
-def _get_content(cd_header):
-    if not cd_header:
-        return None
-    file_name = re.findall('filename=(.+)', cd_header)
-    if len(file_name) == 0:
-        return None
-    return file_name[0]
-
+url_parsed = urllib.parse.urlsplit(api_url)
+url_base = url_parsed.scheme + '://' + url_parsed.netloc
 
 if file_id is not None and http_verb == 'GET':
-    print('Download Starting...')
-    url = 'http://localhost:8080/media/pragmatic-metrics-examples.ods'
-    r = requests.get(url)
-    filename = url.split('/')[-1]  # this will take only -1 splitted part of the url
-    with open(filename, 'wb') as output_file:
-        output_file.write(r.content)
-    print('Download Completed!!!')
+    try:
+        val = int(file_id)
+    except ValueError:
+        logger.error('The "file_id" field must be a int!')
+        exit(1)
+    api_response = requests.get(api_url + '/' + file_id)
+    file_path = api_response.json()['file']
+    file_name = file_path.split('/')[-1]
+    print('Downloading file ' + file_name + '...')
+    file_url_response = requests.get(url_base + file_path)
+    with open(file_name, 'wb') as output_file:
+        output_file.write(file_url_response.content)
+    print('Download completed.')
+
+elif http_verb == 'GET':
+    api_response = requests.get(api_url)
+    print('Retrieving files stored on server at ' + url_base + '...')
+    files = api_response.json()
+    [print(i, file['file'].split('/')[-1]) for i, file in enumerate(files, start=1)]
