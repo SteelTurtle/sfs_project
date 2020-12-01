@@ -2,6 +2,7 @@ import {Component, ViewChild} from '@angular/core';
 import {FileStorageService} from '../services/file-storage.service';
 import {MatDialogRef} from '@angular/material/dialog';
 import {forkJoin, Observable} from 'rxjs';
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-dialog',
@@ -16,7 +17,9 @@ export class DialogComponent {
   isCloseable = true;
 
   constructor(private dialogRef: MatDialogRef<DialogComponent>,
-              private fileStorageService: FileStorageService) {
+              private fileStorageService: FileStorageService,
+              private router: Router,
+              private route: ActivatedRoute) {
   }
 
   showCancelButton = true;
@@ -40,6 +43,7 @@ export class DialogComponent {
 
   closeDialog(): void {
     if (this.uploadSuccessful) {
+      this.router.navigate(['files'], {relativeTo: this.route});
       return this.dialogRef.close();
     }
     this.uploadingStatus = true;

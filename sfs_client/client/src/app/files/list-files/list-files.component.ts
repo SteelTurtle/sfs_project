@@ -6,6 +6,7 @@ import {FileStorageService} from '../services/file-storage.service';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
+import {NavigationEnd, Router} from '@angular/router';
 
 @Component({
   selector: 'app-list-files',
@@ -15,27 +16,34 @@ import {MatSort} from '@angular/material/sort';
 export class ListFilesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   filesListSubscription: Subscription;
+  navigationSubscription: Subscription;
   dataSource = new MatTableDataSource<StoredFile>();
   @ViewChild(MatSort, {static: false}) sort: MatSort;
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
   displayedColumns: string[] = ['id', 'file', 'created_at', 'actions'];
+  storedFiles: StoredFile[];
 
   constructor(private listFilesService: ListFilesService,
-              private fileStorageService: FileStorageService) {
+              private fileStorageService: FileStorageService,
+              private router: Router) {
   }
 
   ngOnInit(): void {
-    this.fileStorageService.fetchFilesFromServer().subscribe(
-      (files: StoredFile[]) => {
-        this.dataSource.data = files;
-      }
-    );
-    this.filesListSubscription = this.listFilesService.changedFilesListSubject.subscribe(() => {
-      this.fileStorageService.fetchFilesFromServer().subscribe(
-        (files: StoredFile[]) => {
-          this.dataSource.data = files;
+    this.filesListSubscription = this.listFilesService.changedFilesListSubject
+      .subscribe((files) => {
+          this.storedFiles = files;
         }
       );
+    this.dataSource.data = this.listFilesService.getFiles();
+    this.navigationSubscription = this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.fileStorageService.fetchFilesFromServer().subscribe(
+          (files: StoredFile[]) => {
+            this.storedFiles = files;
+            this.dataSource.data = this.storedFiles;
+          }
+        );
+      }
     });
   }
 
@@ -51,7 +59,6 @@ export class ListFilesComponent implements OnInit, AfterViewInit, OnDestroy {
   getRecord(name) {
     alert(name);
   }
-
 
   ngOnDestroy(): void {
     this.filesListSubscription.unsubscribe();
