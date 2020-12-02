@@ -15,12 +15,14 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatSortModule} from '@angular/material/sort';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatInputModule} from '@angular/material/input';
+import {MatIconModule} from '@angular/material/icon';
 
 @NgModule({
   imports: [
     BrowserAnimationsModule,
     CommonModule,
     MatButtonModule,
+    MatIconModule,
     MatDialogModule,
     MatInputModule,
     MatListModule,

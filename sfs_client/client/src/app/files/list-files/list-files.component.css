@@ -10,3 +10,9 @@ table {
 button {
   margin: 10px;
 }
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  width: 120px;
+}

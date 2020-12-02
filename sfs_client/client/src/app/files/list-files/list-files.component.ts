@@ -58,7 +58,7 @@ export class ListFilesComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onDownload(id: number): void {
-
+    alert('unimplemented');
   }
 
   onDelete(id: number): void {
