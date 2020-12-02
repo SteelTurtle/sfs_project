@@ -20,7 +20,7 @@ export class ListFilesComponent implements OnInit, AfterViewInit, OnDestroy {
   dataSource = new MatTableDataSource<StoredFile>();
   @ViewChild(MatSort, {static: false}) sort: MatSort;
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
-  displayedColumns: string[] = ['id', 'file', 'created_at', 'actions'];
+  displayedColumns: string[] = ['file', 'created_at', 'actions'];
   storedFiles: StoredFile[];
 
   constructor(private listFilesService: ListFilesService,
@@ -57,8 +57,15 @@ export class ListFilesComponent implements OnInit, AfterViewInit, OnDestroy {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  onDownload(id: number): void {
-    alert('unimplemented');
+  onDownload(fileName: string): void {
+    this.fileStorageService.downloadSelectedFile(fileName).subscribe(fileBlob => {
+      const a = document.createElement('a');
+      const objectUrl = URL.createObjectURL(fileBlob);
+      a.href = objectUrl;
+      a.download = fileName;
+      a.click();
+      URL.revokeObjectURL(objectUrl);
+    });
   }
 
   onDelete(id: number): void {

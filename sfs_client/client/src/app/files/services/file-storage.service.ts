@@ -6,6 +6,7 @@ import {StoredFile} from '../model/file.model';
 import {map, tap} from 'rxjs/operators';
 
 const SERVER_URL = 'http://localhost:8080/api/files';
+const MEDIA_SERVER_BASE_URL = 'http://localhost:8080'; // todo: change this once the pipe directive is done!
 
 @Injectable({providedIn: 'root'})
 export class FileStorageService {
@@ -55,5 +56,9 @@ export class FileStorageService {
 
   public deleteFileFromServer(fileId: number): Observable<StoredFile> {
     return this.httpClient.delete(SERVER_URL + '/' + fileId);
+  }
+
+  public downloadSelectedFile(fileUri: string): Observable<Blob> {
+    return this.httpClient.get(MEDIA_SERVER_BASE_URL + fileUri, {responseType: 'blob'});
   }
 }
