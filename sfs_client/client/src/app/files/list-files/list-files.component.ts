@@ -6,7 +6,7 @@ import {FileStorageService} from '../services/file-storage.service';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
-import {NavigationEnd, Router} from '@angular/router';
+import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 
 @Component({
   selector: 'app-list-files',
@@ -25,7 +25,8 @@ export class ListFilesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(private listFilesService: ListFilesService,
               private fileStorageService: FileStorageService,
-              private router: Router) {
+              private router: Router,
+              private route: ActivatedRoute) {
   }
 
   ngOnInit(): void {
@@ -56,8 +57,15 @@ export class ListFilesComponent implements OnInit, AfterViewInit, OnDestroy {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  getRecord(name) {
-    alert(name);
+  onDownload(id: number): void {
+
+  }
+
+  onDelete(id: number): void {
+    this.filesListSubscription = this.fileStorageService.deleteFileFromServer(id).subscribe(() => {
+      this.listFilesService.deleteFile(id);
+    });
+    this.router.navigate(['files']);
   }
 
   ngOnDestroy(): void {

@@ -52,4 +52,8 @@ export class FileStorageService {
         })
       );
   }
+
+  public deleteFileFromServer(fileId: number): Observable<StoredFile> {
+    return this.httpClient.delete(SERVER_URL + '/' + fileId);
+  }
 }

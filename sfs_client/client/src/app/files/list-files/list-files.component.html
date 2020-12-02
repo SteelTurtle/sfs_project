@@ -24,8 +24,8 @@
   <ng-container matColumnDef="actions">
     <mat-header-cell *matHeaderCellDef mat-header-cell mat-sort-header>Actions</mat-header-cell>
     <mat-cell *matCellDef="let element" mat-cell>
-      <button (click)="getRecord(element.name)" color="primary" mat-raised-button>Download</button>
-      <button (click)="getRecord(element.name)" color="accent" mat-raised-button>Delete</button>
+      <button (click)="onDownload(element.id)" color="primary" mat-raised-button>Download</button>
+      <button (click)="onDelete(element.id)" color="accent" mat-raised-button>Delete</button>
     </mat-cell>
   </ng-container>
 
