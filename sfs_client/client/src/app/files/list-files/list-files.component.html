@@ -10,7 +10,7 @@
   <mat-table [dataSource]="dataSource" matSort>
     <ng-container matColumnDef="file">
       <mat-header-cell *matHeaderCellDef mat-sort-header>File Name</mat-header-cell>
-      <mat-cell *matCellDef="let element">{{ element.file }}</mat-cell>
+      <mat-cell *matCellDef="let element">{{ element.file | filename }}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="created_at">

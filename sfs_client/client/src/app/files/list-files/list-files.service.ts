@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {StoredFile} from '../model/file.model';
+import {StoredFile} from '../../shared/model/file.model';
 import {Subject} from 'rxjs';
 
 @Injectable({

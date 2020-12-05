@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpEventType, HttpRequest, HttpResponse,} from '@angular/common/http';
+import {HttpClient, HttpEventType, HttpRequest, HttpResponse} from '@angular/common/http';
 import {Observable, Subject} from 'rxjs';
 import {ListFilesService} from '../list-files/list-files.service';
-import {StoredFile} from '../model/file.model';
+import {StoredFile} from '../../shared/model/file.model';
 import {map, tap} from 'rxjs/operators';
 
 const SERVER_URL = 'http://localhost:8080/api/files';

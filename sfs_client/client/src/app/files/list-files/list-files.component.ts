@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {StoredFile} from '../model/file.model';
+import {StoredFile} from '../../shared/model/file.model';
 import {Subscription} from 'rxjs';
 import {ListFilesService} from './list-files.service';
 import {FileStorageService} from '../services/file-storage.service';
@@ -62,7 +62,7 @@ export class ListFilesComponent implements OnInit, AfterViewInit, OnDestroy {
       const a = document.createElement('a');
       const objectUrl = URL.createObjectURL(fileBlob);
       a.href = objectUrl;
-      a.download = fileName;
+      a.download = fileName.split('/').pop();
       a.click();
       URL.revokeObjectURL(objectUrl);
     });

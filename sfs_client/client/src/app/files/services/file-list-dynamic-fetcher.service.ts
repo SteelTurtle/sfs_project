@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
-import {StoredFile} from '../model/file.model';
+import {StoredFile} from '../../shared/model/file.model';
 import {Observable} from 'rxjs';
 import {FileStorageService} from './file-storage.service';
 import {ListFilesService} from '../list-files/list-files.service';

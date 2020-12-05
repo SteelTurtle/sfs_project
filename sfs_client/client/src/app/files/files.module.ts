@@ -16,6 +16,7 @@ import {MatSortModule} from '@angular/material/sort';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatInputModule} from '@angular/material/input';
 import {MatIconModule} from '@angular/material/icon';
+import {FilenamePipe} from '../shared/pipes/filename.pipe';
 
 @NgModule({
   imports: [
@@ -35,7 +36,7 @@ import {MatIconModule} from '@angular/material/icon';
     MatSortModule,
     MatPaginatorModule,
   ],
-  declarations: [UploadComponent, DialogComponent, ListFilesComponent],
+  declarations: [UploadComponent, DialogComponent, ListFilesComponent, FilenamePipe],
   exports: [UploadComponent, ListFilesComponent],
 })
 export class FilesModule {
