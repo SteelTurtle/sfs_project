@@ -21,12 +21,14 @@ parser.add_argument('-c', '--command',
                     help='HTTP verb used to call the  API endpoint. GET | POST | DELETE are '
                          'supported. If not specified, default will be GET')
 parser.add_argument('-u', '--url', required=True, help='URL of the file server API endpoint')
-parser.add_argument('-f', '--file', type=str, help='Numeric id of the file to download')
+parser.add_argument('-id', '--id', type=str, help='Numeric id of the file to download')
+parser.add_argument('-f', '--file', type=str, help='name of file to upload on the remote server')
 args = vars(parser.parse_args())
 
 http_verb = args['command']
 api_url = args['url']
-file_id = args['file']
+file_id = args['id']
+file_name = args['file']
 url_parsed = urllib.parse.urlsplit(api_url)
 url_base = url_parsed.scheme + '://' + url_parsed.netloc
 
@@ -57,3 +59,15 @@ elif http_verb == 'GET':
     print('| ID |         FILE          |')
     print('_____________________________')
     [print('{:<6}{}'.format(file['id'], file['file'].split('/')[-1])) for file in files]
+
+elif file_name is not None and http_verb == 'POST':
+    try:
+        file = {'file': open(file_name, 'rb')}
+        response = requests.post(api_url, files=file)
+        print('File "{}" has been uploaded to the server. The file ID is {}'.format(
+            file_name.split('/')[-1],
+            response.json()['id'])
+        )
+    except FileNotFoundError:
+        logger.error('The selected file does not seem to exist. Cannot upload to server.')
+        exit(1)
