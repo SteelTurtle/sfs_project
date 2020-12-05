@@ -1,5 +1,6 @@
-table {
+mat-table {
   width: 100%;
+  justify-content: center;
 }
 
 .mat-form-field {
@@ -19,4 +20,9 @@ button {
 
 .mat-column-select {
   overflow: initial;
+}
+
+mat-header-cell, mat-cell {
+  display: flex;
+  justify-content: center;
 }

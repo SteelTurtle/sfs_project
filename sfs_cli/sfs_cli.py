@@ -56,7 +56,4 @@ elif http_verb == 'GET':
     files = api_response.json()
     print('| ID |         FILE          |')
     print('_____________________________')
-    [
-        print('{:<6}{}'.format(i, file['file'].split('/')[-1]))
-        for i, file in enumerate(files, start=1)
-    ]
+    [print('{:<6}{}'.format(file['id'], file['file'].split('/')[-1])) for file in files]
