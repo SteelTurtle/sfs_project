@@ -2,7 +2,7 @@ import {Component, ViewChild} from '@angular/core';
 import {FileStorageService} from '../services/file-storage.service';
 import {MatDialogRef} from '@angular/material/dialog';
 import {forkJoin, Observable} from 'rxjs';
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-dialog',
@@ -27,6 +27,10 @@ export class DialogComponent {
   uploadSuccessful = false;
   @ViewChild('fileInput') fileInput;
   public files: Set<File> = new Set();
+
+  uploadButtonSelector(): boolean {
+    return !this.files.size;
+  }
 
   addFiles(): void {
     this.fileInput.nativeElement.click();

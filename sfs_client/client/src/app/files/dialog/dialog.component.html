@@ -4,7 +4,7 @@
        (change)="onFilesAdded()"
        multiple/>
 <div class="container" fxLayout="column" fxLayoutAlign="space-evenly stretch">
-  <h1 mat-dialog-title><b>Select one or more files to upload</b></h1>
+  <h1 mat-dialog-title><b>Select one or more files to upload (max 20 MBytes per file)</b></h1>
   <div>
     <button
       [disabled]="uploadingStatus || uploadSuccessful"
@@ -34,7 +34,7 @@
     <button
       mat-raised-button
       color="primary"
-      [disabled]="!isCloseable"
+      [disabled]="uploadButtonSelector()"
       (click)="closeDialog()">
       {{primaryButtonText}}
     </button>
