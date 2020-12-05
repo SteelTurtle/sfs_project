@@ -4,7 +4,7 @@
        (change)="onFilesAdded()"
        multiple/>
 <div class="container" fxLayout="column" fxLayoutAlign="space-evenly stretch">
-  <h1 mat-dialog-title><b>Select one or more files to upload (max 20 MBytes per file)</b></h1>
+  <h1 mat-dialog-title><b>Select one or more files (max 20 MBytes per file)</b></h1>
   <div>
     <button
       [disabled]="uploadingStatus || uploadSuccessful"
@@ -19,7 +19,16 @@
   <mat-dialog-content fxFlex>
     <mat-list>
       <mat-list-item *ngFor="let file of files">
-        <h4 mat-line>{{file.name}}</h4>
+        <div *ngIf="file.size > 20000000; else elseBlock">
+          <h4 matLine style="color: crimson">{{file.name}}
+            <mat-icon style="padding-right: 10px;">error</mat-icon>
+          </h4>
+        </div>
+        <ng-template #elseBlock>
+          <h4 mat-line style="color: darkslateblue">{{file.name}}
+            <mat-icon style="padding-right: 10px;">check_circle</mat-icon>
+          </h4>
+        </ng-template>
         <mat-progress-bar
           *ngIf="progressIndicator"
           mode="determinate"
@@ -34,7 +43,7 @@
     <button
       mat-raised-button
       color="primary"
-      [disabled]="uploadButtonSelector()"
+      [disabled]="permitClickUploadButton()"
       (click)="closeDialog()">
       {{primaryButtonText}}
     </button>

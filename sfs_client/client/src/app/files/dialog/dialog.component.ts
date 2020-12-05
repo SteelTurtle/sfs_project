@@ -12,9 +12,14 @@ import {ActivatedRoute, Router} from '@angular/router';
 export class DialogComponent {
 
   primaryButtonText = 'Upload';
-
   progressIndicator: { [x: string]: { progress: Observable<number>; } | { progress: any; }; };
   isCloseable = true;
+  fileIsTooBig = false;
+  showCancelButton = true;
+  uploadingStatus = false;
+  uploadSuccessful = false;
+  @ViewChild('fileInput') fileInput;
+  public files: Set<File> = new Set();
 
   constructor(private dialogRef: MatDialogRef<DialogComponent>,
               private fileStorageService: FileStorageService,
@@ -22,14 +27,18 @@ export class DialogComponent {
               private route: ActivatedRoute) {
   }
 
-  showCancelButton = true;
-  uploadingStatus = false;
-  uploadSuccessful = false;
-  @ViewChild('fileInput') fileInput;
-  public files: Set<File> = new Set();
-
-  uploadButtonSelector(): boolean {
-    return !this.files.size;
+  permitClickUploadButton(): boolean {
+    if (this.files.size === 0) {
+      return true;
+    }
+    for (const file of this.files.values()) {
+      if (file.size > 20000000) {
+        this.fileIsTooBig = true;
+        return true;
+      }
+    }
+    this.fileIsTooBig = false;
+    return false;
   }
 
   addFiles(): void {
