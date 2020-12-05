@@ -17,6 +17,7 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatInputModule} from '@angular/material/input';
 import {MatIconModule} from '@angular/material/icon';
 import {FilenamePipe} from '../shared/pipes/filename.pipe';
+import {ConfirmDeletionComponent} from './confirm-deletion/confirm-deletion.component';
 
 @NgModule({
   imports: [
@@ -36,7 +37,7 @@ import {FilenamePipe} from '../shared/pipes/filename.pipe';
     MatSortModule,
     MatPaginatorModule,
   ],
-  declarations: [UploadComponent, DialogComponent, ListFilesComponent, FilenamePipe],
+  declarations: [UploadComponent, DialogComponent, ListFilesComponent, FilenamePipe, ConfirmDeletionComponent],
   exports: [UploadComponent, ListFilesComponent],
 })
 export class FilesModule {

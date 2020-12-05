@@ -6,7 +6,9 @@ import {FileStorageService} from '../services/file-storage.service';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
-import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
+import {NavigationEnd, Router} from '@angular/router';
+import {MatDialog} from '@angular/material/dialog';
+import {ConfirmDeletionComponent} from "../confirm-deletion/confirm-deletion.component";
 
 @Component({
   selector: 'app-list-files',
@@ -26,7 +28,7 @@ export class ListFilesComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(private listFilesService: ListFilesService,
               private fileStorageService: FileStorageService,
               private router: Router,
-              private route: ActivatedRoute) {
+              private dialog: MatDialog) {
   }
 
   ngOnInit(): void {
@@ -69,10 +71,19 @@ export class ListFilesComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onDelete(id: number): void {
-    this.filesListSubscription = this.fileStorageService.deleteFileFromServer(id).subscribe(() => {
-      this.listFilesService.deleteFile(id);
+    const dialogRef = this.dialog.open(ConfirmDeletionComponent, {
+      width: '350px',
+      data: 'Are you sure you want to delete the file?'
     });
-    this.router.navigate(['files']);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.filesListSubscription = this.fileStorageService.deleteFileFromServer(id).subscribe(() => {
+          this.listFilesService.deleteFile(id);
+        });
+        this.router.navigate(['files']);
+      }
+    });
+
   }
 
   ngOnDestroy(): void {
