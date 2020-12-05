@@ -1,7 +1,7 @@
 import {Component, ViewChild} from '@angular/core';
 import {FileStorageService} from '../services/file-storage.service';
 import {MatDialogRef} from '@angular/material/dialog';
-import {forkJoin, Observable} from 'rxjs';
+import {forkJoin} from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
@@ -12,7 +12,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 export class DialogComponent {
 
   primaryButtonText = 'Upload';
-  progressIndicator: { [x: string]: { progress: Observable<number>; } | { progress: any; }; };
+  progressIndicator;
   isCloseable = true;
   fileIsTooBig = false;
   showCancelButton = true;
@@ -70,7 +70,7 @@ export class DialogComponent {
     this.isCloseable = false;
     this.dialogRef.disableClose = true;
     this.showCancelButton = false;
-    forkJoin(allProgressObservables).subscribe(() => {
+    forkJoin(allProgressObservables).subscribe(completed => {
       this.isCloseable = true;
       this.dialogRef.disableClose = false;
       this.uploadSuccessful = true;

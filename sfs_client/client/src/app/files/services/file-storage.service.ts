@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpEventType, HttpRequest, HttpResponse} from '@angular/common/http';
+import {HttpClient, HttpEventType, HttpRequest} from '@angular/common/http';
 import {Observable, Subject} from 'rxjs';
 import {ListFilesService} from '../list-files/list-files.service';
 import {StoredFile} from '../../shared/model/file.model';
@@ -28,7 +28,7 @@ export class FileStorageService {
         if (event.type === HttpEventType.UploadProgress) {
           const percentDone = Math.round(100 * event.loaded / event.total);
           progressStatus.next(percentDone);
-        } else if (event instanceof HttpResponse) {
+        } else if (event.type === HttpEventType.Response) {
           progressStatus.complete();
         }
       });
