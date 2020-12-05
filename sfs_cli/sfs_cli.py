@@ -36,7 +36,7 @@ if file_id is not None and http_verb == 'GET':
     try:
         val = int(file_id)
     except ValueError:
-        logger.error('The "file_id" field must be a int!')
+        logger.error('The "id" field must be a int!')
         exit(1)
     api_response = requests.get(api_url + '/' + file_id)
     status_code = api_response.status_code
@@ -71,3 +71,26 @@ elif file_name is not None and http_verb == 'POST':
     except FileNotFoundError:
         logger.error('The selected file does not seem to exist. Cannot upload to server.')
         exit(1)
+
+elif file_id is not None and http_verb == 'DELETE':
+    try:
+        val = int(file_id)
+    except ValueError:
+        logger.error('The "id" field must be a int!')
+        exit(1)
+    api_response = requests.delete(api_url + '/' + file_id)
+    status_code = api_response.status_code
+    if status_code == 204:
+        print('File with ID ' + file_id + 'successfully deleted.')
+    elif status_code == 404:
+        logger.error(
+            'There seems not to be any file with id ' + file_id + " on the server. Cannot "
+                                                                  "delete anything..."
+        )
+else:
+    logger.error(
+        "I'm sorry Dave, I'm afraid I can't do that...\n" +
+        'Wrong command syntax or, some of the parameters specified are incorrect.' +
+        'Check the correct usage with "python sfs_cli --help"'
+    )
+    exit(1)
