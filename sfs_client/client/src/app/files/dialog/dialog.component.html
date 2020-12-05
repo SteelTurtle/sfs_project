@@ -22,10 +22,11 @@
         <div *ngIf="file.size > 20000000; else elseBlock">
           <h4 matLine style="color: crimson">{{file.name}}
             <mat-icon style="padding-right: 10px;">error</mat-icon>
+            <--- ERROR: This file is too big!
           </h4>
         </div>
         <ng-template #elseBlock>
-          <h4 mat-line style="color: darkslateblue">{{file.name}} (TOO BIG)
+          <h4 mat-line style="color: darkslateblue">{{file.name}}
             <mat-icon style="padding-right: 10px;">check_circle</mat-icon>
           </h4>
         </ng-template>
@@ -41,6 +42,7 @@
   <mat-dialog-actions class="actions">
     <button *ngIf="showCancelButton" mat-button mat-dialog-close>Cancel</button>
     <button
+      #buttonInput
       mat-raised-button
       color="primary"
       [disabled]="permitClickUploadButton()"

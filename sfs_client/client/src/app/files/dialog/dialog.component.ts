@@ -1,7 +1,7 @@
 import {Component, ViewChild} from '@angular/core';
 import {FileStorageService} from '../services/file-storage.service';
 import {MatDialogRef} from '@angular/material/dialog';
-import {forkJoin} from 'rxjs';
+import {forkJoin, Observable} from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
@@ -12,13 +12,14 @@ import {ActivatedRoute, Router} from '@angular/router';
 export class DialogComponent {
 
   primaryButtonText = 'Upload';
-  progressIndicator;
+  progressIndicator: { [x: string]: { progress: Observable<number>; } | { progress: any; }; };
   isCloseable = true;
   fileIsTooBig = false;
   showCancelButton = true;
   uploadingStatus = false;
   uploadSuccessful = false;
   @ViewChild('fileInput') fileInput;
+  @ViewChild('buttonInput') buttonInput;
   public files: Set<File> = new Set();
 
   constructor(private dialogRef: MatDialogRef<DialogComponent>,
@@ -59,18 +60,19 @@ export class DialogComponent {
       this.router.navigate(['files'], {relativeTo: this.route});
       return this.dialogRef.close();
     }
+    this.buttonInput.disabled = true;
     this.uploadingStatus = true;
     this.progressIndicator = this.fileStorageService.uploadFiles(this.files);
     const allProgressObservables = [];
     for (const key in this.progressIndicator) {
       allProgressObservables.push(this.progressIndicator[key].progress);
     }
-
-    this.primaryButtonText = 'Finish';
     this.isCloseable = false;
     this.dialogRef.disableClose = true;
     this.showCancelButton = false;
-    forkJoin(allProgressObservables).subscribe(completed => {
+    forkJoin(allProgressObservables).subscribe(() => {
+      this.buttonInput.disabled = false;
+      this.primaryButtonText = 'Finish';
       this.isCloseable = true;
       this.dialogRef.disableClose = false;
       this.uploadSuccessful = true;
