@@ -1,10 +1,16 @@
 #!/usr/bin/env python3
 import argparse
 import logging
+import subprocess
 import sys
 import urllib.parse
 
-import requests
+try:
+    import requests
+except ImportError:
+    subprocess.check_call([sys.executable, "-m", "pip", "install", 'requests'])
+finally:
+    import requests
 
 logger = logging.getLogger('SFS_CLI_LOGGER:   ')
 logger.setLevel(logging.DEBUG)
@@ -81,7 +87,7 @@ elif file_id is not None and http_verb == 'DELETE':
     api_response = requests.delete(api_url + '/' + file_id)
     status_code = api_response.status_code
     if status_code == 204:
-        print('File with ID ' + file_id + 'successfully deleted.')
+        print('File with ID ' + file_id + ' successfully deleted.')
     elif status_code == 404:
         logger.error(
             'There seems not to be any file with id ' + file_id + " on the server. Cannot "
@@ -91,6 +97,6 @@ else:
     logger.error(
         "I'm sorry Dave, I'm afraid I can't do that...\n" +
         'Wrong command syntax or, some of the parameters specified are incorrect.' +
-        'Check the correct usage with "python sfs_cli --help"'
+        ' Check the correct usage with "python sfs_cli --help"'
     )
     exit(1)
