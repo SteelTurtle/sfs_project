@@ -8,7 +8,7 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {NavigationEnd, Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
-import {ConfirmDeletionComponent} from "../confirm-deletion/confirm-deletion.component";
+import {ConfirmDeletionComponent} from '../confirm-deletion/confirm-deletion.component';
 
 @Component({
   selector: 'app-list-files',
@@ -88,6 +88,7 @@ export class ListFilesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.filesListSubscription.unsubscribe();
+    this.navigationSubscription.unsubscribe();
   }
 }
 
